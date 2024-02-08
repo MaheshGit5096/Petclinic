@@ -1,53 +1,33 @@
 pipeline {
-    agent any 
+    agent any
     
-    tools{
-        jdk 'jdk11'
-        maven 'maven3'
-    }
-    
-    environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-    }
-    
-    stages{
-        
-        stage("Git Checkout"){
-            steps{
-                git branch: 'feature-sonar', changelog: false, poll: false, url: 'https://github.com/MaheshGit5096/Petclinic.git'
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'feature-sonar', url: 'https://github.com/MaheshGit5096/Petclinic.git'
             }
         }
-        
-        stage("Compile"){
-            steps{
-                sh "mvn clean compile"
+        stage('Build and Test') {
+            steps {
+                sh 'mvn clean install'
+                sh 'mvn test'
             }
         }
-        
-         stage("Test Cases"){
-            steps{
-                sh "mvn test"
+        stage('SonarQube Analysis') {
+            steps {
+                sh '''
+                mvn sonar:sonar \
+                -Dsonar.host.url=http://13.234.110.183:9000 \
+                -Dsonar.login=34f741c0d428a964968acdca6777ee2f2777096d \
+                -Dsonar.projectKey=Petclinic \
+                -Dsonar.java.binaries=/home/ubuntu/project1/Petclinic/target/classes
+                '''
             }
         }
-        
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
-                    -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=Petclinic '''
-    
-                }
+        stage('Package') {
+            steps {
+                sh 'mvn clean package'
             }
         }
-        
-               
-         stage("Build"){
-            steps{
-                sh " mvn clean package -DTEST=true "
-            }
-        }
-            
-        
     }
 }
