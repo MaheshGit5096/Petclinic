@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'feature-sonar', changelog: false, poll: false, url: 'https://github.com/MaheshGit5096/Petclinic.git'
+                git branch: 'feature-sonar', url: 'https://github.com/MaheshGit5096/Petclinic.git'
             }
         }
         stage('Build and Test') {
@@ -16,7 +16,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 sh '''
-                mvn clean sonar:sonar \
+                mvn sonar:sonar \
                 -Dsonar.host.url=http://13.234.110.183:9000 \
                 -Dsonar.login=34f741c0d428a964968acdca6777ee2f2777096d \
                 -Dsonar.projectKey=Petclinic \
