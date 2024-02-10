@@ -82,7 +82,21 @@
         <sonar.host.url>http://13.234.110.183:9000/</sonar.host.url>
 
     </properties>
+         
+<distributionManagement>
+         <repository>
+                  <id>maven-releases</id>
+                  <!-- CHANGE HERE by your team nexus server -->
+                  <url>http://35.154.197.168:8081/repository/maven-releases/</url>
+         </repository>
+         <snapshot Repository>
+                  <id>maven-snapshots</id>
+                  <!-- CHANGE HERE by your team nexus server -->
+                  <url>http://65.0.180.184:8081/repository/maven-snapshots/</url>
+         </snapshot Repository>
+</distributionManagement>
 
+         
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -552,6 +566,12 @@
             <name>Spring Milestone Repository</name>
             <url>https://repo.spring.io/milestone</url>
         </repository>
+             
+      <repository>
+         <id>maven-releases</id>
+         <name>maven-releases</name>
+         <url>http://http://35.154.197.168:8081/repository/maven-releases/</url>
+      </repository>
     </repositories>
-
+         
 </project>
